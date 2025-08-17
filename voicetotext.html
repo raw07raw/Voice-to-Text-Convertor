@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <style>
+        body{
+            font-family: Arial,sans-serif;
+            padding: 30px;
+            background-color: #724a4a;
+        }
+        #start{
+            padding: 10px 20px;
+            font-size: 18px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        #output{
+            margin-top: 20px;
+            padding: 15px;
+            font-size: 20px;
+            border: 2px dashed #ccc;
+            background: #fff;
+            min-height: 100px;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Voice to Text(Speech Recognition)</h1>
+    <button id="start">Start Listening</button>
+    <div id="output" aria-placeholder="Spoken text will appear here.."></div>
+
+    <script>
+        const output=document.getElementById("output");
+        
+        const startBtn=document.getElementById("start");
+
+        // check browser compatibility---
+
+        const SpeechRecognition=window.speechRecognition ||
+         window.webkitSpeechRecognition;
+
+         if(!SpeechRecognition){
+            output.innerText="Speech recognition not supported in this browser";
+            startBtn.disabled=true;
+         }
+         else{
+            const recognition=new SpeechRecognition();
+            recognition.lang='en-Us';
+            recognition.continuous=false;
+            recognition.interimResults=false;
+         
+         startBtn.onclick=()=>{
+            recognition.start();
+            startBtn.innerText="Listening...";
+         };
+         recognition.onresult=(event)=>{
+            const transcript=event.results[0][0].transcript;
+            output.innerText=transcript;
+           
+            console.log(transcript);
+            if(transcript=="YouTube"){
+                window.open("https://www.youtube.com/","_blank");
+            }
+            else if(transcript==="Facebook"){
+                window.open("https://www.facebook.com/","_blank");
+            }
+            else if(transcript==="LinkedIn"){
+                window.open("https://www.linkedin.com/","_blank");
+            }
+            else if(transcript==="Google"){
+                window.open("https://www.google.com/","_blank");
+            }
+
+             startBtn.innerText="Start Listening"
+        
+         };
+         recognition.onerror=(event)=>{
+            output.innerText="Error:"+event.error;
+            startBtn.innerText="Start Listening";
+         };
+         recognition.onend=()=>{
+            if(startBtn.innerText==="Listening..."){
+                startBtn.innerText="Start Listening";
+            }
+         };
+         var text=document.getElementById("output").value;
+        
+        }
+
+    </script>
+</body>
+
+</html>
